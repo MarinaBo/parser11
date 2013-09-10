@@ -1,0 +1,22 @@
+import urllib2
+from BeautifulSoup import BeautifulSoup
+
+a=raw_input('Введите слово для поиска: ')
+
+headers = { 'User-Agent' : 'Mozilla/5.0 (Windows; I; Windows NT 5.1; ru; rv:1.9.2.13) Gecko/20100101 Firefox/4.0' }
+req = urllib2.Request('http://ru.wikipedia.org/wiki/'+a, None, headers)
+html = urllib2.urlopen(req).read()
+page = BeautifulSoup(html)
+
+#print page.findAll('div', id="mw-content-text")[0].findAll('p')
+
+f=open("log.html","w")
+for res in page.findAll('div', id="mw-content-text")[0].contents:
+    try:
+        if res.name == 'p':
+            print res.prettify()
+            f.write (str(res))
+    except AttributeError:
+        pass
+
+f.close()
